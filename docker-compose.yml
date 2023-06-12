@@ -1,0 +1,66 @@
+version: '3.9'
+services:
+  teamspeak:
+    container_name: m210_teamspeak
+    image: teamspeak:3.13.7
+    restart: always
+    depends_on:
+      - mariadb
+    ports:
+      - 9987:9987/udp
+      - 10011:10011
+      - 30033:30033
+    environment:
+      TS3SERVER_DB_PLUGIN: ts3db_mariadb
+      TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+      TS3SERVER_DB_HOST: mariadb
+      TS3SERVER_DB_USER: root
+      TS3SERVER_DB_PASSWORD_FILE: /run/secrets/m210_sql_pw
+      TS3SERVER_DB_NAME: teamspeak
+      TS3SERVER_DB_WAITUNTILREADY: 30
+      TS3SERVER_LICENSE: accept
+    volumes:
+      - m210_teamspeak:/var/ts3server/
+    secrets:
+      - m210_sql_pw
+  mariadb:
+    container_name: m210_mariadb
+    image: mariadb:10.9
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/m210_sql_pw
+      MYSQL_DATABASE: teamspeak
+    volumes:
+      - m210_mariadb:/var/lib/mysql
+    secrets:
+      - m210_sql_pw
+  mc:
+    container_name: m210_minecraft
+    build: ./minecraft
+    ports:
+      - 19132:19132/udp
+    environment:
+      EULA: "TRUE"
+      OPS: "2535472454386105"
+    restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - m210_minecraft:/data
+  api:
+    container_name: m210_api
+    build: ./app
+    restart: always
+    ports:
+      # Port of web api
+      - "8069:8069"
+      # Port of websocket
+      - "3000:3000"
+
+volumes:
+  m210_mariadb:
+  m210_teamspeak:
+  m210_minecraft:
+secrets:
+  m210_sql_pw:
+    file: sql_pw.txt

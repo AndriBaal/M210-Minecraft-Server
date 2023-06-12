@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <title>Minecraft Game Manager</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="text-danger">Minecraft Game Manager</h1>
+    {{#each games as |g|}}
+    <div class="row">
+      <div class="col-11 mx-auto my-3 p-2 bg-secondary rounded">
+        <div class="d-flex justify-content-between">
+          <h3>{{g.name}}</h3>
+          {{#unless g.running}}
+          <form action="/remove_game" method="get">
+            <input type="hidden" value="{{g.name}}" name="game">
+            <button class="btn-close" type="submit" aria-label="Close" />
+          </form>
+          {{/unless}}
+        </div>
+        {{#if g.running}}
+        <form action="/update_game" method="get">
+          <input type="hidden" value="{{g.name}}" name="game">
+          <button type="submit" class="btn btn-danger">Stop</button>
+        </form>
+        {{else}}
+        <form action="/update_game" method="get">
+          <input type="hidden" value="{{g.name}}" name="game">
+          <button type="submit" class="btn btn-success">Start</button>
+        </form>
+        {{/if}}
+        <div class="d-flex p-3">
+          <div class="w-50 p-3 round bg-danger">
+            <strong class="">Red Team:</strong>
+            {{#each g.red_players as |p|}}
+            <div class="d-flex justify-content-between">
+              <p>{{p.name}}</p>
+              {{#unless g.running}}
+              <form action="/remove_player" method="get">
+                <input type="hidden" value="{{g.name}}" name="game">
+                <input type="hidden" value="{{p.name}}" name="player">
+                <button class="btn-close" type="submit" aria-label="Close" />
+              </form>
+              {{/unless}}
+            </div>
+            {{/each}}
+            {{#unless g.running}}
+            <form class="d-flex" action="/add_player" method="get">
+              <input type="hidden" value="Red" name="team">
+              <input type="hidden" value="{{g.name}}" name="game">
+              <input class="w-50" placeholder="Name..." type="text" id="name" name="name">
+              <input class="w-50" type="submit" value="Add Player">
+            </form>
+            {{/unless}}
+          </div>
+          <div class="w-50 p-3 round bg-primary">
+            <strong class="">Blue Team:</strong>
+            {{#each g.blue_players as |p|}}
+            <div class="d-flex justify-content-between">
+              <p>{{p.name}}</p>
+              {{#unless g.running}}
+              <form action="/remove_player" method="get">
+                <input type="hidden" value="{{g.name}}" name="game">
+                <input type="hidden" value="{{p.name}}" name="player">
+                <button class="btn-close" type="submit" aria-label="Close" />
+              </form>
+              {{/unless}}
+            </div>
+            {{/each}}
+            {{#unless g.running}}
+            <form class=" d-flex" action="/add_player" method="get">
+              <input type="hidden" value="Blue" name="team">
+              <input type="hidden" value="{{g.name}}" name="game">
+              <input class="w-50" placeholder="Name..." type="text" id="name" name="name">
+              <input class="w-50" type="submit" value="Add Player">
+            </form>
+            {{/unless}}
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  <form class="w-50 mt-3 m-auto d-flex" action="/add_game" method="get">
+    <input class="w-50" type="text" id="name" name="name">
+    <input class="w-50" type="submit" value="Add Game">
+  </form>
+</body>
+
+</html>
