@@ -1,6 +1,0 @@
-*.opd#
-todo.txt
-sql_pw.txt
-target/
-Cargo.lock
-.idea

@@ -152,6 +152,12 @@ async fn update_game(
                 send(
                     &state_ref._hub,
                     &mut state_ref.client,
+                    format!("effect {} instant_heal 1 4", player.name),
+                );
+
+                send(
+                    &state_ref._hub,
+                    &mut state_ref.client,
                     format!("effect {} night_vision 100000 1", player.name),
                 );
 
@@ -159,6 +165,15 @@ async fn update_game(
                     &state_ref._hub,
                     &mut state_ref.client,
                     format!("/scoreboard teams add {} ", player.name),
+                );
+
+                send(
+                    &state_ref._hub,
+                    &mut state_ref.client,
+                    format!(
+                        "/replaceitem entity {} slot.armor.head 1 iron_helmet",
+                        player.name
+                    ),
                 );
 
                 send(
@@ -191,7 +206,7 @@ async fn update_game(
                 send(
                     &state_ref._hub,
                     &mut state_ref.client,
-                    format!("/give {} diamond_sword 1", player.name),
+                    format!("/give {} iron_sword 1", player.name),
                 );
 
                 send(
