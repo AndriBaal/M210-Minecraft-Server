@@ -152,13 +152,19 @@ async fn update_game(
                 send(
                     &state_ref._hub,
                     &mut state_ref.client,
-                    format!("effect {} instant_health 1 4", player.name),
+                    format!("/effect {} clear", player.name),
                 );
 
                 send(
                     &state_ref._hub,
                     &mut state_ref.client,
-                    format!("effect {} night_vision 100000 1", player.name),
+                    format!("/effect {} instant_health 1 4", player.name),
+                );
+
+                send(
+                    &state_ref._hub,
+                    &mut state_ref.client,
+                    format!("/effect {} night_vision 100000 1", player.name),
                 );
 
                 send(
@@ -218,10 +224,17 @@ async fn update_game(
                 send(
                     &state_ref._hub,
                     &mut state_ref.client,
-                    format!("teleport {} {} {} 0", player.name, x_offset, offset + 3),
+                    format!("/teleport {} {} {} 0", player.name, x_offset, offset + 3),
                 );
             }
         } else {
+            for (_, player) in game.blue_players.iter().chain(game.red_players.iter()) {
+                send(
+                    &state_ref._hub,
+                    &mut state_ref.client,
+                    format!("/effect {} weakness 100000 255", player.name),
+                );
+            }
         }
     }
     return web::Redirect::to("/");
