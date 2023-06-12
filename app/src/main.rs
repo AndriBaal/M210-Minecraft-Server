@@ -152,7 +152,7 @@ async fn update_game(
                 send(
                     &state_ref._hub,
                     &mut state_ref.client,
-                    format!("effect {} instant_heal 1 4", player.name),
+                    format!("effect {} instant_health 1 4", player.name),
                 );
 
                 send(
