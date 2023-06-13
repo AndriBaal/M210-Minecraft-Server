@@ -112,7 +112,7 @@ async fn update_game(
                 &state_ref._hub,
                 &mut state_ref.client,
                 format!(
-                    "fill {} {} {} {} {} {} bedrock hollow",
+                    "/fill {} {} {} {} {} {} bedrock hollow",
                     x1,
                     offset,
                     z1,
